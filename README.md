@@ -30,8 +30,4 @@ O BlindFrog é um sistema de supermercado desenvolvido com React e JavaScript. E
 
 - **API:** A API do BlindFrog foi desenvolvida para fornecer dados de produtos e interagir com o frontend.
 
-Desenvolvido por Gil Gilberto de Souza Rodrigues
-
-## Instagram: https://www.instagram.com/gilgilbertosr/
-## Linkedin: https://www.linkedin.com/in/gil-rodrigues-27bb60268/
-## Email: gilgilberto.s.rodrigues@gmail.com
+Desenvolvido por Gil Gilberto de Souza Rodrigues & Alberto Porto Quirino Junior
