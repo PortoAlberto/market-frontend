@@ -30,6 +30,7 @@ const Signin = () => {
       return;
     }
     toast.success(result[1]);
+    console.log(result);
     navigate("/home");
   };
 

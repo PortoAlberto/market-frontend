@@ -17,7 +17,7 @@ const Home = () => {
   const [selectedProduct] = useState(null);
   const [editedProduct, setEditedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const { signout, createProduct, getProducts, newProduct } = useAuth();
+  const { signout, createProduct, getProducts, editProduct } = useAuth();
   const [error, setError] = useState("");
   const [products, setProducts] = useState([]);
 
@@ -93,12 +93,12 @@ const Home = () => {
     const price = e.target.price.value;
     const thumbnail = e.target.thumbnail.value;
     const quantity = e.target.quantity.value;
-
-    const result = await newProduct({
+    const result = await editProduct({
       name,
       price,
       thumbnail_url: thumbnail,
       quantity,
+      id: editedProduct.id,
     });
 
     if (!result[0]) {
@@ -195,8 +195,7 @@ const Home = () => {
                   id="name"
                   name="name"
                   maxLength="50"
-                  value={editedProduct.name || ""}
-                  required
+                  defaultValue={editedProduct.name || ""}
                 />
               </div>
               <div>
@@ -206,7 +205,7 @@ const Home = () => {
                   id="price"
                   name="price"
                   maxLength="5"
-                  required
+                  defaultValue={editedProduct.price || ""}
                 />
               </div>
               <div>
@@ -216,12 +215,18 @@ const Home = () => {
                   id="quantity"
                   name="quantity"
                   maxLength="5"
-                  required
+                  defaultValue={editedProduct.quantity || ""}
                 />
               </div>
               <div>
                 <label htmlFor="thumbnail">URL da Imagem: (1:1)</label>
-                <input type="url" id="thumbnail" name="thumbnail" required />
+                <input
+                  type="url"
+                  id="thumbnail"
+                  name="thumbnail"
+                  required
+                  defaultValue={editedProduct.thumbnail_url || ""}
+                />
               </div>
               <button type="submit">Atualizar Produto</button>
             </form>

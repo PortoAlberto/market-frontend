@@ -7,7 +7,6 @@ export const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
-
   useEffect(() => {
     const userToken = localStorage.getItem("user_token");
     const usersStorage = localStorage.getItem("users_bd");
@@ -29,7 +28,7 @@ export const AuthProvider = ({ children }) => {
     }
     setUser({ email });
     const { access_token } = response.data;
-
+    console.log(access_token);
     localStorage.setItem("user_token", JSON.stringify({ access_token }));
     localStorage.setItem("users_bd", JSON.stringify({ email }));
 
@@ -66,7 +65,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("users_bd");
   };
 
-  const createProduct = async ({ name, price, thumbnail_url }) => {
+  const createProduct = async ({ name, price, thumbnail_url, quantity }) => {
     const storagedToken = localStorage.getItem("user_token");
     const { access_token } = JSON.parse(storagedToken);
     console.log(name, price, thumbnail_url);
@@ -77,6 +76,7 @@ export const AuthProvider = ({ children }) => {
           name,
           price: parseFloat(price),
           thumbnail_url,
+          quantity,
         },
         {
           headers: {
@@ -96,6 +96,38 @@ export const AuthProvider = ({ children }) => {
     }
 
     return [true, "Produto criado com sucesso!"];
+  };
+
+  const editProduct = async ({ name, price, thumbnail_url, quantity, id }) => {
+    const storagedToken = localStorage.getItem("user_token");
+    const { access_token } = JSON.parse(storagedToken);
+    const response = await api
+      .put(
+        `/product/${id}`,
+        {
+          name,
+          price: parseFloat(price),
+          thumbnail_url,
+          quantity,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      )
+      .catch((error) => {
+        console.log(error);
+      });
+
+    if (!response) {
+      return [
+        false,
+        "Ocorreu um problema no servidor, tente novamente mais tarde!",
+      ];
+    }
+
+    return [true, "Produto editado com sucesso!"];
   };
 
   const getProducts = async () => {
@@ -127,6 +159,7 @@ export const AuthProvider = ({ children }) => {
         signout,
         createProduct,
         getProducts,
+        editProduct,
       }}
     >
       {children}
