@@ -17,7 +17,7 @@ const Home = () => {
   const [selectedProduct] = useState(null);
   const [editedProduct, setEditedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const { signout, createProduct, getProducts, updatedProduct } = useAuth();
+  const { signout, createProduct, getProducts, newProduct } = useAuth();
   const [error, setError] = useState("");
   const [products, setProducts] = useState([]);
 
@@ -44,8 +44,9 @@ const Home = () => {
     const name = e.target.name.value;
     const price = e.target.price.value;
     const thumbnail = e.target.thumbnail.value;
+    const quantity = parseInt(e.target.quantity.value, 10);
 
-    if (!name || !price || !thumbnail) {
+    if (!name || !price || !thumbnail || isNaN(quantity)) {
       setError("Preencha todos os campos corretamente.");
       toast.error("Preencha todos os campos corretamente.");
       return;
@@ -55,6 +56,7 @@ const Home = () => {
       name,
       price,
       thumbnail_url: thumbnail,
+      quantity,
     });
 
     if (!result[0]) {
@@ -90,11 +92,13 @@ const Home = () => {
     const name = e.target.name.value;
     const price = e.target.price.value;
     const thumbnail = e.target.thumbnail.value;
+    const quantity = e.target.quantity.value;
 
-    const result = await updatedProduct({
+    const result = await newProduct({
       name,
       price,
       thumbnail_url: thumbnail,
+      quantity,
     });
 
     if (!result[0]) {
@@ -151,18 +155,18 @@ const Home = () => {
                 />
               </div>
               <div>
-                <label htmlFor="thumbnail">URL da Imagem: (1:1)</label>
-                <input type="url" id="thumbnail" name="thumbnail" required />
-              </div>
-              <div>
                 <label htmlFor="quantity">Quantidade:</label>
                 <input
                   type="number"
                   id="quantity"
                   name="quantity"
-                  min="1"
+                  maxLength="5"
                   required
                 />
+              </div>
+              <div>
+                <label htmlFor="thumbnail">URL da Imagem: (1:1)</label>
+                <input type="url" id="thumbnail" name="thumbnail" required />
               </div>
               <button type="submit">Criar Produto</button>
             </form>
@@ -175,7 +179,7 @@ const Home = () => {
               <h4>{product.name}</h4>
               <Img src={product.thumbnail_url} alt={product.name} />
               <p>R$ {product.price}</p>
-              <h4>Quantidade: {product.quantity}</h4>
+              <p>Quantidade: {product.quantity}</p>
               <button onClick={() => handleEdit(product)}>Editar</button>
             </div>
           ))}
@@ -201,6 +205,16 @@ const Home = () => {
                   type="number"
                   id="price"
                   name="price"
+                  maxLength="5"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="quantity">Quantidade:</label>
+                <input
+                  type="number"
+                  id="quantity"
+                  name="quantity"
                   maxLength="5"
                   required
                 />
